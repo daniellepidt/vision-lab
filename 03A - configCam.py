@@ -9,17 +9,17 @@ class Config_Cam():
     """
     def __init__(self,**dict):
         #Get list of names of attributes to config
-        self.names=____________
+        self.names=dict["names"]
         #Get list of values of attributes to config
-        self.values=____________
+        self.values=dict["values"]
         #Get list of counts of attributes to config
-        self.counts=_____________
+        self.counts=dict["counts"]
         #Predefine window name
         cv2.namedWindow('image')
         for i in range(len(self.names)):
             #Create trackbars from all the names each one is called with a
             #name from the list params(nameOfTrackbar,windowName,currentValue,countValue,callBackName)
-            cv2.createTrackbar(__________, _______, __________,____________, ___________)
+            cv2.createTrackbar(self.names[i],'image',self.values[i],self.counts[i],lambda x:x)
 
     def on_track(self,x):
         pass
@@ -30,16 +30,16 @@ class Config_Cam():
         #of the configed parameter
         myDic={}
         while True:
-            _,self.img=cap.read()
+            myDic,self.img=cap.read()
             #Wait to show the image
-            k = _________(10) & 0xFF
+            k = cv2.waitKey(0) & 0xFF
             #Escape breaks the program
-            if __ == 27:
-                _____
+            if k == 27:
+                cv2.destroyAllWindows()
             #Iterate names
             for n in (self.names):
                 #Set value of dictionary to value of slider parameters name of bar, name of window
-                myDic[__]=cv2.getTrackbarPos(___,___)
+                myDic[n]=cv2.getTrackbarPos(self.names,'image')
                 #Set the name of attribute in a way that opencv understand
                 #for example:cv2.CAP_PROP_CONTRAST
                 attr='cv2.CAP_PROP_'+n.upper()
@@ -48,7 +48,7 @@ class Config_Cam():
                 # the eval method change from string to object.
                 cap.set(eval(attr),myDic[n]/100)
             #Show video with configed cam on the predefined window parameters winName,frame
-            cv2.imshow(___,____)
+            cv2.imshow('image',self.img)
 
 conf=Config_Cam(names=['Contrast','Saturation','Brightness'],values=[50,50,50],counts=[100,100,100])
 conf.main()
