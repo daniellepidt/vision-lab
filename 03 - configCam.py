@@ -19,10 +19,10 @@ class Config_Cam():
         for i in range(len(self.names)):
             #Create trackbars from all the names each one is called with a
             #name from the list params(nameOfTrackbar,windowName,currentValue,countValue,callBackName)
-            cv2.createTrackbar(self.names[i],'image',self.values[i],self.counts[i],lambda x:x)
+            cv2.createTrackbar(self.names[i],'image',self.values[i],self.counts[i], self.on_track)
 
     def on_track(self,x):
-        pass
+        return x
 
     def main(self):
         cap = cv2.VideoCapture(0)
@@ -30,16 +30,16 @@ class Config_Cam():
         #of the configed parameter
         myDic={}
         while True:
-            myDic,self.img=cap.read()
+            _, self.img = cap.read()
             #Wait to show the image
-            k = cv2.waitKey(0) & 0xFF
+            k = cv2.waitKey(1) & 0xFF
             #Escape breaks the program
             if k == 27:
                 cv2.destroyAllWindows()
             #Iterate names
             for n in (self.names):
                 #Set value of dictionary to value of slider parameters name of bar, name of window
-                myDic[n]=cv2.getTrackbarPos(self.names,'image')
+                myDic[n]=cv2.getTrackbarPos(n,'image')
                 #Set the name of attribute in a way that opencv understand
                 #for example:cv2.CAP_PROP_CONTRAST
                 attr='cv2.CAP_PROP_'+n.upper()
@@ -48,7 +48,7 @@ class Config_Cam():
                 # the eval method change from string to object.
                 cap.set(eval(attr),myDic[n]/100)
             #Show video with configed cam on the predefined window parameters winName,frame
-            cv2.imshow('image',self.img)
+            cv2.imshow('image', self.img)
 
 conf=Config_Cam(names=['Contrast','Saturation','Brightness'],values=[50,50,50],counts=[100,100,100])
 conf.main()

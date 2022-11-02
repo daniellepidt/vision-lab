@@ -1,4 +1,5 @@
-import cv2,numpy as np
+import cv2, numpy as np
+from pdb import set_trace
 class FetureMatch:
     """
     Use Orb, Brisk, Kaze, Akaze methods to detect a predefined object.
@@ -15,31 +16,32 @@ class FetureMatch:
         self.MIN_MATCH_COUNT = 8
         self.img1 = cv2.imread(img2Find)   # queryImage
         self.img2 = cv2.imread(img2Search) # trainImage
-        self.modes=modes
+        self.modes = modes
         #Dictinary for center of masses key=mode val=cm
-        self.cms={}
+        self.cms = {}
 
     def compute(self):
         #Convert images to gray scale  cv2.cvtColor
-        gray1=____________(__________,____________)
-        gray2=____________(__________,____________)
+        gray1 = cv2.cvtColor(self.img1,cv2.COLOR_BGR2GRAY)
+        gray2 = cv2.cvtColor(self.img2,cv2.COLOR_BGR2GRAY)
         #Dictinary for center of masses key=mode val=cm
-        myDic={}
+        myDic = {}
         # Declare distance type 4 the matcher to orb and brisk.
         distanceType = cv2.NORM_HAMMING
         for mode in self.modes:
             # All modes have same signature cv2.mode_create() mode is defined in big letters.
             # Parameters: orb:nfeatures=10000, brisk:thresh=10, kaze and akaze:distanceType:cv2.DIST_L2
             # ToDo declare all detectors
-            ___________________:
-                detector = _________________________
-            ___________________:
-                detector = ___________________________
-            ___________________:
-                detector = ___________________
+            if mode == 'orb':
+                detector = cv2.ORB_create(nfeatures=10000)
+            elif mode == 'brisk':
+                detector = cv2.BRISK_create(thresh=10)
+            elif mode == 'kaze':
+                detector = cv2.KAZE_create()
                 distanceType = cv2.DIST_L2
-            ____________________:
-                detector = __________________
+            elif mode == 'akaze':
+                detector = cv2.AKAZE_create()
+                distanceType = cv2.DIST_L2
             # Declare matcher
             matcher = cv2.BFMatcher(distanceType)
             #kp pos of keyPoints, des descriptors interesting points.
@@ -59,27 +61,28 @@ class FetureMatch:
                 dst = cv2.perspectiveTransform(pts,M)
                 #Flatten the points of the object to a list.
                 rvl=dst.ravel()
+                set_trace()
                 cmx=cmy=nPts=0
                 # Calculate the center of mass
                 # Traverse the Flatten list of points
-                ________________________:
-                # Sum the x value of the points, and count num of points
-                if ____:
-                    ________________
-                    _______________
-                else:
-                    # Sum the Y value of the points
-                    ___________
+                for i in range(3):
+                    # Sum the x value of the points, and count num of points
+                    if ____:
+                        ________________
+                        _______________
+                    else:
+                        # Sum the Y value of the points
+                        ___________
                 #Calculate C.M should be integer (pixel)
                 self.cm=__________________
                 #Update dictionary cms with the cm position and the number of
                 #good points in every method.
-                ________________________
+                self.cms[mode] = (self.cm, nPts)
                 #Draw green poligon around the searched object on the original picture
                 self.img2 = cv2.polylines(self.img2,[np.int32(dst)],True,(0,255,0),3, cv2.LINE_AA)
                 #Draw blue circle of the C.M on the original image
                 #circle(img,pos,radius,color,thikness
-                self.img2=cv2.____(____,____,_,(_,_,_),5)
+                self.img2=cv2.circle(self.img2,[np.int32(dst)],3,(0,0,255),5)
             else:
                 print ("mode=%s ,Not enough matches are found - %d/%d" % (mode,len(good),self.MIN_MATCH_COUNT))
 
@@ -88,9 +91,14 @@ class FetureMatch:
         Shows the boxed colored detected object in the searched image
         :return:
         """
-        ____________________________
-        _______________________
-        ______________________
+        #Compute the center of mass for desired num of objects
+        self.compute()
+        #Show the result as a picture
+        cv2.imshow('pic',self.pic)
+        #Wait untill button is pressed
+        cv2.waitKey(0)
+        #Clear memory.
+        cv2.destroyAllWindows()
 
     def getCm(self):
         """
@@ -98,8 +106,7 @@ class FetureMatch:
         :return: dictionary with the method as key, center of mass and #good matches
         as a tuple value
         """
-        _______________
-        ________________
+        return self.cms
 fm=FetureMatch(['orb','brisk','kaze','akaze'],'croped.jpg','img.jpg')
 fm.show()
 print(fm.getCm())
