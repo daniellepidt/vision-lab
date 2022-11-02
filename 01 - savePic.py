@@ -1,4 +1,5 @@
 import cv2,os
+
 def savePic(path='img1.jpg',flag=None):
     """
     Show stream s key save img q key aborts.
@@ -13,17 +14,19 @@ def savePic(path='img1.jpg',flag=None):
         # Display the resulting frame
         cv2.imshow('frame',frame)
         # Wait for press
-        w=_____________________
+        w=cv2.waitKey(1) & 0xFF
         # Quit
-        if w==__________:
+        if w==ord('q'):
             break
         # Saving
-        elif w==________:
-            if ____:
-                frame=_______________
+        elif w==ord('s'):
+            if flag:
+                frame=cv2.cvtColor(frame, flag)
             #Save to disk.
             cv2.imwrite(path,frame)
     #Release memory.
     cap.release()
     cv2.destroyAllWindows()
 
+# Run 'savePic' function:
+savePic(flag=1)
