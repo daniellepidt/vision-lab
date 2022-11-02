@@ -37,6 +37,7 @@ class DetectColor():
             #Escape breaks the code
             if k==27:
                 cv2.destroyAllWindows()
+                break
             if self.firstClick:
                 #Convert image to hsv format.
                 hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -44,12 +45,10 @@ class DetectColor():
                 if self.notClickedYet:
                     #Lower bound is determined by taking the h value and subtracting 10
                     #and s and v values are fixed to 50
-                    # lower=np.array([self.x-10,50,50])
-                    lower=np.array([110,50,50])
+                    lower=np.array([hsv[self.y][self.x][0]-10,50,50])
                     #Upper bound is determined by taking the h value and adding 10
                     #and s and v values are fixed to 255
-                    # upper=np.array([self.x+10,255,255])
-                    upper=np.array([130,255,255])
+                    upper=np.array([hsv[self.y][self.x][0]+10,255,255])
                     self.notClickedYet=False
                 #Mask of 0 and 1 of the pixels within the range between lower and upper
                 mask = cv2.inRange(hsv, lower, upper)
