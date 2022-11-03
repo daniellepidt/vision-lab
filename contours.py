@@ -90,6 +90,6 @@ class Contour():
         self.compute()
         return self.angles
 
-cont=Contour('img1.jpg',3)
+cont=Contour('img.jpg',3)
 cont.show()
 print(cont.get_angles())

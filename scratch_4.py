@@ -54,6 +54,6 @@ class Contour():
         #Return list with all center of mases.
         return self.cms
 
-cont=Contour('img1.jpg',3)
+cont=Contour('img.jpg',3)
 cont.show()
 print(cont.get_cm())
