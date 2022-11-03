@@ -1,5 +1,4 @@
 import cv2, numpy as np
-from pdb import set_trace
 class FetureMatch:
     """
     Use Orb, Brisk, Kaze, Akaze methods to detect a predefined object.
@@ -61,20 +60,19 @@ class FetureMatch:
                 dst = cv2.perspectiveTransform(pts,M)
                 #Flatten the points of the object to a list.
                 rvl=dst.ravel()
-                set_trace()
                 cmx=cmy=nPts=0
                 # Calculate the center of mass
                 # Traverse the Flatten list of points
-                for i in range(3):
+                for i in range(len(rvl)):
                     # Sum the x value of the points, and count num of points
-                    if ____:
-                        ________________
-                        _______________
+                    if i % 2 != 0:
+                        cmx += rvl[i]
+                        nPts += 1
                     else:
                         # Sum the Y value of the points
-                        ___________
+                        cmy += rvl[i]
                 #Calculate C.M should be integer (pixel)
-                self.cm=__________________
+                self.cm=(int(cmx/nPts),int(cmy/nPts))
                 #Update dictionary cms with the cm position and the number of
                 #good points in every method.
                 self.cms[mode] = (self.cm, nPts)
@@ -82,7 +80,7 @@ class FetureMatch:
                 self.img2 = cv2.polylines(self.img2,[np.int32(dst)],True,(0,255,0),3, cv2.LINE_AA)
                 #Draw blue circle of the C.M on the original image
                 #circle(img,pos,radius,color,thikness
-                self.img2=cv2.circle(self.img2,[np.int32(dst)],3,(0,0,255),5)
+                self.img2=cv2.circle(self.img2,self.cm,3,(255,0,0),5)
             else:
                 print ("mode=%s ,Not enough matches are found - %d/%d" % (mode,len(good),self.MIN_MATCH_COUNT))
 
@@ -94,7 +92,7 @@ class FetureMatch:
         #Compute the center of mass for desired num of objects
         self.compute()
         #Show the result as a picture
-        cv2.imshow('pic',self.pic)
+        cv2.imshow('pic', self.img2)
         #Wait untill button is pressed
         cv2.waitKey(0)
         #Clear memory.
@@ -102,7 +100,6 @@ class FetureMatch:
 
     def getCm(self):
         """
-
         :return: dictionary with the method as key, center of mass and #good matches
         as a tuple value
         """
