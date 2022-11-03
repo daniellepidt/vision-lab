@@ -22,7 +22,7 @@ class Config_Cam():
             cv2.createTrackbar(self.names[i],'image',self.values[i],self.counts[i], self.on_track)
 
     def on_track(self,x):
-        return x
+        pass
 
     def main(self):
         cap = cv2.VideoCapture(0)
@@ -32,10 +32,11 @@ class Config_Cam():
         while True:
             _, self.img = cap.read()
             #Wait to show the image
-            k = cv2.waitKey(1) & 0xFF
+            k = cv2.waitKey(10) & 0xFF
             #Escape breaks the program
             if k == 27:
                 cv2.destroyAllWindows()
+                break
             #Iterate names
             for n in (self.names):
                 #Set value of dictionary to value of slider parameters name of bar, name of window
@@ -46,7 +47,7 @@ class Config_Cam():
                 #Set the desired value to the camera, ranges of these attributes are 0:1
                 #and the sliders values are 0:100 so we scale it by 1/100
                 # the eval method change from string to object.
-                cap.set(eval(attr),myDic[n]/100)
+                cap.set(eval(attr),myDic[n])
             #Show video with configed cam on the predefined window parameters winName,frame
             cv2.imshow('image', self.img)
 
