@@ -65,7 +65,7 @@ class FetureMatch:
                 # Traverse the Flatten list of points
                 for i in range(len(rvl)):
                     # Sum the x value of the points, and count num of points
-                    if i % 2 != 0:
+                    if i % 2 == 0:
                         cmx += rvl[i]
                         nPts += 1
                     else:
