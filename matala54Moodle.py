@@ -1,5 +1,5 @@
 import cv2, numpy as np
-class FetureMatch:
+class FeatureMatch:
     """
     Use Orb, Brisk, Kaze, Akaze methods to detect a predefined object.
     Parameters:
@@ -104,6 +104,6 @@ class FetureMatch:
         as a tuple value
         """
         return self.cms
-fm=FetureMatch(['orb','brisk','kaze','akaze'],'croped.jpg','img.jpg')
+fm=FeatureMatch(['orb','brisk','kaze','akaze'],'croped.jpg','img.jpg')
 fm.show()
 print(fm.getCm())
